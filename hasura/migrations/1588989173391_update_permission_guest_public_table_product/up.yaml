@@ -1,0 +1,17 @@
+- args:
+    permission:
+      allow_aggregations: false
+      backend_only: false
+      columns:
+      - id
+      - name
+      - created_at
+      - updated_at
+      computed_fields: []
+      filter: {}
+      limit: null
+    role: guest
+    table:
+      name: product
+      schema: public
+  type: create_select_permission

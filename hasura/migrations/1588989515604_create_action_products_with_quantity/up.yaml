@@ -1,0 +1,36 @@
+- args:
+    enums: []
+    input_objects: []
+    objects:
+    - description: null
+      fields:
+      - description: null
+        name: id
+        type: Int!
+      - description: null
+        name: name
+        type: String
+      - description: null
+        name: quantity
+        type: Int
+      - description: null
+        name: created_at
+        type: timestamptz
+      - description: null
+        name: updated_at
+        type: timestamptz
+      name: ProductWithQuantity
+    scalars: []
+  type: set_custom_types
+- args:
+    comment: null
+    definition:
+      arguments: []
+      forward_client_headers: false
+      handler: http://host.docker.internal:3000/products
+      headers: []
+      kind: synchronous
+      output_type: '[ProductWithQuantity]'
+      type: query
+    name: products_with_quantity
+  type: create_action
