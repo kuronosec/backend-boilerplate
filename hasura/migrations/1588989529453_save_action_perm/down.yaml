@@ -1,0 +1,4 @@
+- args:
+    action: products_with_quantity
+    role: guest
+  type: drop_action_permission

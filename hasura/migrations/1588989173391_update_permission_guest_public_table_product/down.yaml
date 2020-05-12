@@ -1,0 +1,6 @@
+- args:
+    role: guest
+    table:
+      name: product
+      schema: public
+  type: drop_select_permission

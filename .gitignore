@@ -1,0 +1,4 @@
+hapi/node_modules
+.env*
+!.env.example
+db_data

@@ -1,0 +1,7 @@
+- args:
+    action: products_with_quantity
+    definition:
+      select:
+        filter: {}
+    role: guest
+  type: create_action_permission

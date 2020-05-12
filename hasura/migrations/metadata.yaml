@@ -1,0 +1,36 @@
+version: 2
+tables:
+- table:
+    schema: public
+    name: product
+  select_permissions:
+  - role: guest
+    permission:
+      columns:
+      - id
+      - name
+      - created_at
+      - updated_at
+      filter: {}
+actions:
+- name: products_with_quantity
+  definition:
+    handler: http://host.docker.internal:9090/products
+    output_type: '[ProductWithQuantity]'
+    type: query
+  permissions:
+  - role: guest
+custom_types:
+  objects:
+  - name: ProductWithQuantity
+    fields:
+    - name: id
+      type: Int!
+    - name: name
+      type: String
+    - name: quantity
+      type: Int
+    - name: created_at
+      type: timestamptz
+    - name: updated_at
+      type: timestamptz
