@@ -1,4 +1,5 @@
 k8s/
+utils/
 Dockerfile
 makefile
 node_modules/

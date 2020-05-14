@@ -1,3 +1,3 @@
-const productRoutes = require('./product.routes')
+const auth = require('./auth/routes')
 
-module.exports = [productRoutes]
+module.exports = [...auth]
