@@ -4,7 +4,7 @@ volumes:
 services:
   postgres:
     container_name: "${STAGE}-${APP_NAME}-postgres"
-    image: postgres:12
+    image: postgres:11.5-alpine
     ports:
       - "5432:5432"
     volumes:
@@ -22,27 +22,23 @@ services:
       - ./hapi:/usr/app
     env_file:
       - "./hapi/.env"
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:9090/api/status"]
-      interval: 10m
-      timeout: 10s
-      retries: 3
+
   hasura:
     container_name: "${STAGE}-${APP_NAME}-hasura"
-    image: hasura/graphql-engine:v1.2.1.cli-migrations-v2
-    ports:
-      - "8080:8080"
-    depends_on:
-      - "postgres"
-    volumes:
-      - ./hasura/migrations:/hasura-migrations
-      - ./hasura/metadata:/hasura-metadata
     build:
       context: ./hasura
       dockerfile: ./Dockerfile
       args:
         hasura_graphql_migrations_dir: /hasura-migrations
         hasura_graphql_metadata_dir: /hasura-metadata
-    restart: on-failure
+    image: hasura
+    ports:
+      - "8085:8080"
     env_file:
-      - "./hasura/.env"
+      - "hasura/.env"
+    restart: on-failure
+    volumes:
+      - .hasura/migrations:/hasura-migrations
+      - .hasura/metadata:/hasura-metadata
+    depends_on:
+      - postgres

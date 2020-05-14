@@ -11,8 +11,8 @@ run-local-db:
 
 run: ##@local Run the project locally
 run:
-	@$(SHELL_EXPORT) docker-compose up -d hapi
-	@$(SHELL_EXPORT) docker-compose up -d postgres
+	@$(SHELL_EXPORT) docker-compose up -d --build hapi
+	@$(SHELL_EXPORT) docker-compose up -d --build postgres
 	@until \
 		docker-compose exec postgres pg_isready; \
 		do echo waiting for postgres service; \
