@@ -11,11 +11,11 @@ const {
 } = require('config')
 
 const handleLogin = async (
-  { payload: { user_name, password } },
+  { payload: { username, password } },
   { context: { hasuraClient } }
 ) => {
   try {
-    const { user } = await hasuraClient.request(LOGIN, { user_name, password })
+    const { user } = await hasuraClient.request(LOGIN, { username, password })
 
     if (!user.length) {
       return Boom.unauthorized()
