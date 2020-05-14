@@ -1,7 +1,9 @@
-const dadabaseConfig = require('./dadabase.config')
-const serverConfig = require('./server.config')
-
 module.exports = {
-  dadabaseConfig,
-  serverConfig
+  jwtConfig: require('./jwt'),
+  apiConfig: require('./api'),
+  ipfsConfig: require('./ipfs'),
+  i18nConfig: require('./i18n'),
+  hasuraConfig: require('./hasura'),
+  eosConfig: require('./eos'),
+  constants: require('./constants')
 }

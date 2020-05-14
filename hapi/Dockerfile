@@ -1,8 +1,20 @@
-FROM node:14
+FROM node:14.2.0
+
+# Create app directory
 WORKDIR /usr/app
+
+# Install dev tools
+
+# Install nodemon for dev
+RUN yarn --ignore-optional --frozen-lockfile global add nodemon
+
+# Install app dependencies
 COPY package*.json ./
-RUN npm install
+COPY yarn.lock ./
+RUN yarn
+
+# Bundle app source
 COPY . .
-RUN npm install -g pm2
+
 EXPOSE 9090
-CMD ["pm2-runtime", "--watch", "src/index.js"]
+CMD nodemon -L src/index.js
