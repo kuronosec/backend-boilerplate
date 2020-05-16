@@ -1,5 +1,4 @@
 include utils/meta.mk utils/help.mk
-LOCAL_DB_URL = postgres://eoscr:password@localhost:5432/eoscr_local
 
 clear-local-db: ##@local Remove the local db container, image and volume
 clear-local-db:
@@ -12,7 +11,6 @@ run-local-db:
 run: ##@local Run the project locally
 run:
 	@$(SHELL_EXPORT) [ -f .env ] && source .env || echo "$(YELLOW)WARNING:$(RESET) .env file not found"
-	@$(SHELL_EXPORT) docker-compose up -d --build hapi
 	@$(SHELL_EXPORT) docker-compose up -d --build postgres
 	@until \
 		docker-compose exec postgres pg_isready; \
@@ -23,8 +21,9 @@ run:
 		curl http://localhost:8085/v1/version; \
 		do echo "$(BLUE)INFO$(RESET) waiting for hasura service"; \
 		sleep 5; done;
+	@$(SHELL_EXPORT) docker-compose up -d --build hapi
 	@cd hasura; \
-		hasura console --endpoint http://localhost:8085
+		hasura console --endpoint http://localhost:8085 --no-browser 
 
 stop: ##@local Stops the development instance
 stop:
@@ -46,16 +45,18 @@ launch-console:
 
 generate-seed: ##@local Generates a seed dump file with data available on public schema
 generate-seed:
+	@$(SHELL_EXPORT) [ -f .env ] && source .env || echo "$(YELLOW)WARNING:$(RESET) .env file not found"
 	@docker-compose exec \
 		postgres pg_dump \
 		--schema public \
 		--data-only \
-		$(LOCAL_DB_URL) \
+		$(DATABASE_URL) \
 		| grep -v -E 'search_path'
 
 restore-seed: ##@local Takes a given seed and restores it to the db
 restore-seed:
+	@$(SHELL_EXPORT) [ -f .env ] && source .env || echo "$(YELLOW)WARNING:$(RESET) .env file not found"
 	@docker-compose exec \
 		-T \
 		postgres psql \
-		$(LOCAL_DB_URL)
+		$(DATABASE_URL)

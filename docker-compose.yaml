@@ -23,8 +23,6 @@ services:
       HOST_ADDRESS: "${HOST_ADDRESS}"
       HASURA_URL: "${HASURA_URL}"
       HASURA_ADMIN_SECRET: "${HASURA_ADMIN_SECRET}"
-    depends_on:
-      - "postgres"
     restart: on-failure
   hasura:
     container_name: "${STAGE}-${APP_NAME}-hasura"
