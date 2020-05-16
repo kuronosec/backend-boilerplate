@@ -3,7 +3,7 @@ const { JsSignatureProvider } = require('eosjs/dist/eosjs-jssig') // development
 const fetch = require('node-fetch')
 const { TextEncoder, TextDecoder } = require('util')
 
-const { eosConfig } = require('config')
+const { eosConfig } = require('./config')
 
 const defaultPrivateKey = eosConfig.privateKey
 const signatureProvider = new JsSignatureProvider([defaultPrivateKey])

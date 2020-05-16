@@ -1,9 +1,10 @@
 .DEFAULT_GOAL= help
 
 #COLORS
-GREEN  := $(shell tput -Txterm setaf 2)
 WHITE  := $(shell tput -Txterm setaf 7)
+BLUE   := $(shell tput -Txterm setaf 6)
 YELLOW := $(shell tput -Txterm setaf 3)
+GREEN  := $(shell tput -Txterm setaf 2)
 RESET  := $(shell tput -Txterm sgr0)
 
 # Add the following 'help' target to your Makefile

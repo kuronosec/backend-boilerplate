@@ -1,3 +1,1 @@
-module.exports = {
-  authApi: require('./auth')
-}
+module.exports = {}

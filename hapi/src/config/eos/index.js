@@ -1,4 +1,4 @@
 module.exports = {
-  privateKey: process.env.DEFAULT_PVT_KEY || 'secret',
-  jungleUrl: process.env.CHAIN_URL || 'secret'
+  privateKey: process.env.EOS_API_ENDPOINT || 'secret',
+  jungleUrl: process.env.EOS_API_PRIVATE_KEY || 'secret'
 }

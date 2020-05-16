@@ -1,23 +1,15 @@
 const Hapi = require('@hapi/hapi')
 const Boom = require('@hapi/boom')
 const Path = require('path')
-
-const ipfsClient = require('ipfs-http-client')
 const { GraphQLClient } = require('graphql-request')
 
-const routes = require('routes')
-const {
-  apiConfig,
-  ipfsConfig,
-  jwtConfig,
-  i18nConfig,
-  hasuraConfig
-} = require('config')
+const { serverConfig, i18nConfig, hasuraConfig } = require('./config')
+const routes = require('./routes')
 
 const init = async () => {
   const server = Hapi.server({
-    port: apiConfig.port,
-    host: apiConfig.host,
+    port: serverConfig.port,
+    host: serverConfig.host,
     routes: {
       cors: { origin: ['*'] },
       validate: {
@@ -36,11 +28,6 @@ const init = async () => {
   })
 
   server.bind({
-    ipfs: ipfsClient({
-      host: ipfsConfig.host,
-      port: ipfsConfig.port,
-      protocol: ipfsConfig.protocol
-    }),
     i18n: i18nConfig,
     hasuraClient: new GraphQLClient(hasuraConfig.url, {
       headers: {
@@ -60,28 +47,10 @@ const init = async () => {
       }
     },
     {
-      plugin: require('hapi-auth-jwt2'),
-      options: {}
-    },
-    {
       plugin: require('@hapi/inert'),
       options: {}
     }
   ])
-
-  server.auth.strategy('jwt', 'jwt', {
-    key: jwtConfig.publicKey,
-    validate: async () => {
-      return {
-        isValid: true
-      }
-    },
-    verifyOptions: {
-      algorithms: [jwtConfig.algorithm]
-    }
-  })
-
-  server.auth.default('jwt')
 
   await server.start()
 

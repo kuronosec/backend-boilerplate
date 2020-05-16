@@ -11,26 +11,38 @@ run-local-db:
 
 run: ##@local Run the project locally
 run:
+	@$(SHELL_EXPORT) [ -f .env ] && source .env || echo "$(YELLOW)WARNING:$(RESET) .env file not found"
 	@$(SHELL_EXPORT) docker-compose up -d --build hapi
 	@$(SHELL_EXPORT) docker-compose up -d --build postgres
 	@until \
 		docker-compose exec postgres pg_isready; \
-		do echo waiting for postgres service; \
+		do echo "$(BLUE)INFO$(RESET) waiting for postgres service"; \
 		sleep 5; done;
-	@$(SHELL_EXPORT) docker-compose up --build -d hasura
+	@$(SHELL_EXPORT) docker-compose up -d --build hasura
 	@until \
 		curl http://localhost:8085/v1/version; \
-		do echo waiting for hasura service; \
+		do echo "$(BLUE)INFO$(RESET) waiting for hasura service"; \
 		sleep 5; done;
-	@hasura console --endpoint http://localhost:8085
+	@cd hasura; \
+		hasura console --endpoint http://localhost:8085
 
 stop: ##@local Stops the development instance
 stop:
 	@docker-compose stop
 
+install: ##@local Install hapi dependencies
+install:
+	@cd hapi && yarn
+
+pre-commit: ##@local Run pre commit validations for hapi
+pre-commit:
+	@[ ! -d hapi/node_modules ] && cd hapi && yarn || echo ""
+	@cd hapi && yarn format && yarn lint
+
 launch-console: ##@local Launch hasura console pointing at local server
 launch-console:
-	@hasura console --endpoint http://localhost:8085
+	@cd hasura; \
+		hasura console --endpoint http://localhost:8085
 
 generate-seed: ##@local Generates a seed dump file with data available on public schema
 generate-seed:
