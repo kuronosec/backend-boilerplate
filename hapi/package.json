@@ -3,10 +3,7 @@
   "version": "0.1.0",
   "main": "src/index.js",
   "description": "EOSCR Backend Boilerplate",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/eoscostarica/backend-boilerplate.git"
-  },
+  "repository": "https://github.com/eoscostarica/backend-boilerplate.git",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node src/index.js",
@@ -15,14 +12,20 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run format && npm run lint"
+      "pre-commit": "yarn format && yarn lint "
     }
   },
   "license": "MIT",
   "dependencies": {
+    "@hapi/boom": "^9.0.0",
     "@hapi/hapi": "^19.1.1",
-    "pg": "^8.0.3",
-    "sequelize": "^5.21.7"
+    "@hapi/inert": "^6.0.1",
+    "@hapi/joi": "^17.1.0",
+    "eosjs": "^20.0.3",
+    "graphql-request": "^1.8.2",
+    "hapi-pino": "^6.5.0",
+    "http-status-codes": "^1.4.0",
+    "i18next": "^19.3.2"
   },
   "devDependencies": {
     "eslint": "^6.8.0",
@@ -33,8 +36,8 @@
     "eslint-plugin-prettier": "^3.1.3",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
-    "husky": "^4.2.5",
+    "husky": "^4.2.3",
     "precise-commits": "^1.0.2",
-    "prettier": "^2.0.5"
+    "prettier": "^1.19.1"
   }
 }

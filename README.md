@@ -35,15 +35,14 @@ eoscrbackendboilerplate/
 ├── hapi
 │ ├── src
 │ | ├── config
-│ | ├── lib
-│ | ├── models
+│ | ├── api
 │ | ├── routes
 │ | └── config.ymal
 │ ├── .dockerignore
 │ ├── .eslintrc
 │ ├── .prettierrc
 │ ├── Dockerfile
-│ ├── package-lock.json
+│ ├── yarn-lock.json
 │ └── package.json
 ├── .env.example
 ├── .gitignore
@@ -57,9 +56,8 @@ eoscrbackendboilerplate/
 
 There are some important folders like
 
-- `hapi/src/lib` should have all reusable code for example a code to generate tax invoice
-- `hapi/src/models` here you can map your database table to can be used with sequelize
-- `hapi/src/routes` this folder should only have the endpoint mapping and params validations and use functions from lib folder to handle the business logic
+- `hapi/src/api` should have all reusable code for example a code to generate tax invoice
+- `hapi/src/routes` this folder should only have the endpoint mapping and params validations and use functions from api folder to handle the business logic
 
 ## Installation
 
@@ -80,31 +78,37 @@ Somethings you need before getting started:
 3.  Copy the `.env.example` then update the environment variables according to your needs
 
 ```
-POSTGRES_PASSWORD=postgrespassword
-DATABASE_URL=postgres://postgres:postgrespassword@postgres:5432/postgres
-HAPI_PORT=9090
-HAPI_HOST=0.0.0.0
+# global
+STAGE=dev
+APP_NAME=eoscr-backend-boilerplate
+
+# postgres
+POSTGRES_USER=eoscr
+POSTGRES_PASSWORD=password
+POSTGRES_DB=localdb
+
+# hasura
 HASURA_GRAPHQL_ENABLE_CONSOLE=true
-HASURA_GRAPHQL_ENABLED_LOG_TYPES=startup,http-log,webhook-log,websocket-log,query-log
+HASURA_GRAPHQL_ENABLED_LOG_TYPES=startup,query-log,http-log,webhook-log,websocket-log
+DATABASE_URL=postgres://eoscr:password@postgres:5432/localdb
 HASURA_GRAPHQL_ADMIN_SECRET=myadminsecretkey
 HASURA_GRAPHQL_UNAUTHORIZED_ROLE=guest
+
+# hapi
+PORT=9090
+HOST_ADDRESS=0.0.0.0
+EOS_API_ENDPOINT=https://jungle.eosio.cr
+EOS_API_PRIVATE_KEY=secrect
+HASURA_ADMIN_SECRET=myadminsecretkey
+HASURA_URL=http://localhost:8085/v1/graphql
 ```
 
 ### Quick start
 
-At this point you can run `source .env && docker-compose up --build`, you can check the services runing on:
+At this point you can run `make run`, you can check the services runing on:
 
 - hapi at http://localhost:9090
-- hasura at http://localhost:8080
-
-### Hasura migrations
-
-You can access to hasura console from http://localhost:8080 but if tou want generate migrations for any changes that you execute you should use the hasura cli
-
-```
-cd hasura
-hasura console --endpoint http://localhost:8080 --admin-secret myadminsecretkey
-```
+- hasura at http://localhost:9695
 
 ## License
 
@@ -122,11 +126,58 @@ Thanks goes to these wonderful people ([emoji key](https://github.com/kentcdodds
 
 <table>
   <tr>
-    <td align="center"><a href="https://github.com/xavier506"><img src="https://avatars0.githubusercontent.com/u/5632966?v=4" width="100px;" alt="Xavier Fernandez"/><br /><sub><b>Xavier Fernandez</b></sub></a><br /><a href="#ideas-xavier506" title="Ideas, Planning, & Feedback">🤔</a> <a href="#blog-xavier506" title="Blogposts">📝</a> <a href="#talk-xavier506" title="Talks">📢</a> <a href="#infra-xavier506" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a></td>
- <td align="center"><a href="https://github.com/tetogomez">
-      <img src="https://avatars3.githubusercontent.com/u/10634375?s=460&v=4" width="100px;" alt="Teto Gomez"/><br /><sub><b>Teto Gomez</b></sub></a><br /><a href="https://github.com/eoscostarica/backend-boilerplate/commits?author=tetogomez" title="Ideas, Planning, & Feedback">🤔</a> <a href="https://github.com/eoscostarica/backend-boilerplate/commits?author=tetogomez" title="Code">💻</a> <a href="#review-tetogomez" title="Reviewed Pull Requests">👀</a></td>
-      <td align="center"><a href="https://github.com/adriexnet">
-      <img src="https://avatars3.githubusercontent.com/u/5375168?s=460&u=542a27a00b761d98851991c6a6d5f78d7b35a2b2&v=4" width="100px;" alt="Adriel Diaz"/><br /><sub><b>Adriel Diaz</b></sub></a><br /><a href="https://github.com/eoscostarica/backend-boilerplate/commits?author=adriexnet" title="Ideas, Planning, & Feedback">🤔</a> <a href="https://github.com/eoscostarica/backend-boilerplate/commits?author=adriexnet" title="Code">💻</a> <a href="#review-adriexnet" title="Reviewed Pull Requests">👀</a></td>
+    <td align="center">
+      <a href="https://github.com/xavier506">
+        <img src="https://avatars0.githubusercontent.com/u/5632966?v=4" width="100px;" alt="Xavier Fernandez"/>
+        <br />
+        <sub>
+          <b>
+            Xavier Fernandez
+          </b>
+        </sub>
+      </a>
+      <br />
+      🤔📝📢🚇
+    </td>
+    <td align="center">
+      <a href="https://github.com/tetogomez">
+        <img src="https://avatars3.githubusercontent.com/u/10634375?s=460&v=4" width="100px;" alt="Teto Gomez"/>
+        <br />
+        <sub>
+          <b>
+            Teto Gomez
+          </b>
+        </sub>
+      </a>
+      <br />
+      🤔💻👀
+    </td>
+    <td align="center">
+      <a href="https://github.com/adriexnet">
+        <img src="https://avatars3.githubusercontent.com/u/13205620?s=400&u=9adad6d2e42165c184894b9175785d15a903f58b&v=4" width="100px;" alt="Adriel Diaz"/>
+        <br />
+        <sub>
+          <b>
+            Rubén Abarca Navarro
+          </b>
+        </sub>
+      </a>
+      <br />
+      📃💻😎
+    </td>
+    <td align="center">
+      <a href="https://github.com/adriexnet">
+        <img src="https://avatars3.githubusercontent.com/u/5375168?s=460&u=542a27a00b761d98851991c6a6d5f78d7b35a2b2&v=4" width="100px;" alt="Adriel Diaz"/>
+        <br />
+        <sub>
+          <b>
+            Adriel Diaz
+          </b>
+        </sub>
+      </a>
+      <br />
+      🏡💻❤️
+    </td>
   </tr>
 </table>
 
@@ -143,4 +194,4 @@ This project follows the [all-contributors](https://github.com/kentcdodds/all-co
 
 EOS Costa Rica is an independently-owned, self-funded, bare-metal Genesis block producer that provides stable and secure infrastructure for EOSIO blockchains. We support open source software for our community while offering enterprise solutions and custom smart contract development for our clients.
 
-[eoscostarica.io](https://eoscostarica.io)
+[eoscostarica.io](https://eoscostarica.io) Support OpenSource!
