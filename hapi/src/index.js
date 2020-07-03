@@ -4,6 +4,7 @@ const Path = require('path')
 
 const { serverConfig, i18nConfig } = require('./config')
 const routes = require('./routes')
+const { syncWorker } = require('./workers')
 
 const init = async () => {
   const server = Hapi.server({
@@ -50,6 +51,7 @@ const init = async () => {
 
   console.log(`🚀 Server ready at ${server.info.uri}`)
   server.table().forEach(route => console.log(`${route.method}\t${route.path}`))
+  syncWorker.start()
 }
 
 process.on('unhandledRejection', err => {
