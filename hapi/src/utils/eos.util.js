@@ -6,7 +6,7 @@ const EosApi = require('eosjs-api')
 
 const { eosConfig } = require('../config')
 
-const wallet = require('./wallet')
+const walletUtil = require('./wallet.util')
 
 const textEncoder = new TextEncoder()
 const textDecoder = new TextDecoder()
@@ -18,14 +18,17 @@ const eosApi = EosApi({
 })
 
 const newAccount = async accountName => {
-  const password = await wallet.create(accountName)
-  const key = await wallet.createKey(accountName)
+  const password = await walletUtil.create(accountName)
+  const key = await walletUtil.createKey(accountName)
 
   try {
-    await wallet.unlock(eosConfig.baseAccount, eosConfig.baseAccountPassword)
+    await walletUtil.unlock(
+      eosConfig.baseAccount,
+      eosConfig.baseAccountPassword
+    )
   } catch (error) {}
 
-  const keys = await wallet.listKeys(
+  const keys = await walletUtil.listKeys(
     eosConfig.baseAccount,
     eosConfig.baseAccountPassword
   )
@@ -106,7 +109,7 @@ const newAccount = async accountName => {
       expireSeconds: 30
     }
   )
-  await wallet.lock(eosConfig.baseAccount)
+  await walletUtil.lock(eosConfig.baseAccount)
 
   return {
     password,
@@ -158,10 +161,10 @@ const getTableRows = options => eosApi.getTableRows({ json: true, ...options })
 
 const transact = async (actions, account, password) => {
   try {
-    await wallet.unlock(account, password)
+    await walletUtil.unlock(account, password)
   } catch (error) {}
 
-  const keys = await wallet.listKeys(account, password)
+  const keys = await walletUtil.listKeys(account, password)
   const api = new Api({
     rpc,
     textDecoder,
@@ -180,7 +183,7 @@ const transact = async (actions, account, password) => {
     }
   )
 
-  await wallet.lock(account)
+  await walletUtil.lock(account)
 
   return transaction
 }
