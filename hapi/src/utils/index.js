@@ -1,4 +1,5 @@
 module.exports = {
-  jwtUtils: require('./jwt'),
-  eosUtils: require('./eosio')
+  eosUtilcd: require('./eos.util'),
+  hasuraUtil: require('./hasura.util'),
+  walletUtil: require('./wallet.util')
 }
