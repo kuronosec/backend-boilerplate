@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    io.kompose.service: postgres
+  name: postgres
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: postgres
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        io.kompose.network: "true"
+        io.kompose.service: postgres
+    spec:
+      containers:
+      - image: postgres:11.5-alpine
+        imagePullPolicy: ""
+        name: ${STAGE}-${APP_NAME}-postgres
+        envFrom:
+        - configMapRef:
+            name: postgres-config
+        ports:
+        - containerPort: 5432
+        volumeMounts:
+        - mountPath: /var/lib/postgresql/data
+          name: ${STAGE}-${APP_NAME}-postgres
+          subPathExpr: $(DATABASE_DIRECTORY)
+      restartPolicy: Always
+      volumes:
+      - name: ${STAGE}-${APP_NAME}-postgres
+        nfs:
+          server: NFS-server
+          path: /mnt/
